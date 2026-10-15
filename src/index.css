@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Geist', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, Consolas, monospace;
+  --color-ink: #161616;
+  --color-muted: #6f6f6f;
+  --color-faint: #9a9a9a;
+  --color-paper: #fafafa;
+  --color-accent: #e8432e;
+}
+
+body {
+  @apply bg-paper font-sans text-ink antialiased;
+}
+
+/* Faint dashed vertical guide line */
+@utility guide-x {
+  background-image:
+    repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.09) 0 4px, transparent 4px 9px),
+    repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.09) 0 4px, transparent 4px 9px);
+  background-size:
+    1px 100%,
+    1px 100%;
+  background-position:
+    left top,
+    right top;
+  background-repeat: no-repeat;
+}
+
+/* Small uppercase monospace label used throughout */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out both;
+}
+
+/* Block-wipe text reveal (see RevealText.tsx) */
+@keyframes reveal-block {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.01% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+@keyframes reveal-text {
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-seg {
+  position: relative;
+  display: inline-block;
+}
+
+.reveal-seg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  animation: reveal-block 0.9s cubic-bezier(0.77, 0, 0.18, 1) var(--reveal-delay, 0s) both;
+}
+
+.reveal-text {
+  opacity: 0;
+  animation: reveal-text 0.01s linear calc(var(--reveal-delay, 0s) + 0.45s) forwards;
+}
+
+.animate-blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-blink {
+    animation: none;
+  }
+}
